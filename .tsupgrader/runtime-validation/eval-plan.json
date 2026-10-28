@@ -1,0 +1,51 @@
+{
+  "generatedAt": "2026-10-28T16:05:00Z",
+  "generatedOnPlatform": "darwin",
+  "projectType": "webapp",
+  "setup": [
+    {
+      "command": "npm",
+      "args": ["ci"]
+    }
+  ],
+  "assertions": [
+    {
+      "name": "production-build",
+      "kind": "process",
+      "command": "npm",
+      "args": ["run", "build"],
+      "verificationMethod": "exit-code",
+      "expected": "0",
+      "timeoutSeconds": 180
+    },
+    {
+      "name": "tests-pass",
+      "kind": "process",
+      "command": "npm",
+      "args": ["test"],
+      "verificationMethod": "test-results",
+      "expected": "0",
+      "timeoutSeconds": 180
+    },
+    {
+      "name": "dev-server-serves-home",
+      "kind": "http-probe",
+      "startCommand": "npm",
+      "startArgs": ["run", "dev"],
+      "url": "http://127.0.0.1:5173/",
+      "verificationMethod": "http-status",
+      "expected": "200",
+      "timeoutSeconds": 120
+    },
+    {
+      "name": "local-model-status-route",
+      "kind": "http-probe",
+      "startCommand": "npm",
+      "startArgs": ["run", "dev"],
+      "url": "http://127.0.0.1:5173/api/status",
+      "verificationMethod": "output-contains",
+      "expected": "storyModelAvailable",
+      "timeoutSeconds": 120
+    }
+  ]
+}
